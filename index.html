@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กัลย์สุดา กรกัน (น้ำขิง) | Academic Portfolio</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            300: '#7cc5fb',
+                            400: '#36a3f7',
+                            500: '#0c87eb',
+                            600: '#006ac9',
+                            700: '#0254a3',
+                            800: '#064786',
+                            900: '#0b3c6f',
+                            950: '#07264a',
+                        },
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Kanit', 'Sarabun', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- React & ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8fafc;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .gatsby-gradient {
+            background: linear-gradient(135deg, #0b3c6f 0%, #0284c7 50%, #2563eb 100%);
+        }
+        .gatsby-card-gradient {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col justify-between">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('overview');
+            const [filterCategory, setFilterCategory] = useState('all');
+            const [searchQuery, setSearchQuery] = useState('');
+            const [copied, setCopied] = useState(false);
+            const [showDeployGuide, setShowDeployGuide] = useState(false);
+
+            const personalInfo = {
+                fullName: "กัลย์สุดา กรกัน",
+                nickname: "น้ำขิง",
+                age: 18,
+                nationality: "ไทย",
+                currentInstitute: "วิทยาลัยการสาธารณสุขสิรินธร จังหวัดขอนแก่น",
+                highSchool: "โรงเรียนห้วยผึ้งพิทยา",
+                phone: "0960964573",
+                email: "k14349277@gmail.com",
+                address: "262/14 ห้วยผึ้ง ต.นิคมห้วยผึ้ง อำเภอห้วยผึ้ง จังหวัดกาฬสินธุ์",
+                bio: "นักศึกษาสาธารณสุขที่มีมนุษยสัมพันธ์ดีเยี่ยม เข้ากับผู้อื่นได้ง่าย ปรับตัวเข้ากับสภาพแวดล้อมใหม่ๆ ได้ดี พร้อมทำงานเป็นทีมด้วยความมุ่งมั่น ตั้งใจขับเคลื่อนกิจกรรมพัฒนาสุขภาพ เยาวชน และสังคมอย่างมีประสิทธิภาพ"
+            };
+
+            const educationHistory = [
+                {
+                    level: "ระดับอุดมศึกษา (ปัจจุบัน)",
+                    institute: "วิทยาลัยการสาธารณสุขสิรินธร จังหวัดขอนแก่น",
+                    location: "อำเภอเมืองขอนแก่น จังหวัดขอนแก่น",
+                    status: "กำลังศึกษาอยู่",
+                    badge: "นักศึกษาปัจจุบัน",
+                    icon: "fa-user-nurse",
+                    color: "border-brand-500 bg-brand-50/40",
+                    details: [
+                        "ศึกษาต่อในระดับอุดมศึกษาด้านการสาธารณสุข มุ่งเน้นการสร้างเสริมสุขภาพและการทำงานร่วมกับชุมชน",
+                        "นำประสบการณ์ด้านการทำกิจกรรม สภานักเรียน และงานเยาวชน มาประยุกต์ใช้ในการเรียนและการพัฒนางานวิชาชีพ"
+                    ]
+                },
+                {
+                    level: "ระดับมัธยมศึกษา (ม.1 - ม.6)",
+                    institute: "โรงเรียนห้วยผึ้งพิทยา",
+                    location: "อำเภอห้วยผึ้ง จังหวัดกาฬสินธุ์",
+                    status: "สำเร็จการศึกษา",
+                    badge: "ศิษย์เก่า",
+                    icon: "fa-school",
+                    color: "border-slate-300 bg-slate-50/50",
+                    details: [
+                        "ดำรงตำแหน่ง รองประธานกลุ่มบริหารทั่วไป สภานักเรียน ปีการศึกษา ๒๕๖๘",
+                        "นักเรียนแกนนำโครงการค่ายเยาวชนเจนใหม่หัวใจสุจริต (ต่อเนื่อง 2 ปีซ้อน)",
+                        "ทำหน้าที่พิธีกรดำเนินรายการงานเปิดบ้านวิชาการ และกิจกรรม TO BE NUMBER ONE",
+                        "เป็นตัวแทนฝึกซ้อมนักเรียนและวิทยากรตัวคูณขยายผลโรงเรียนเครือข่าย"
+                    ]
+                }
+            ];
+
+            const experiences = [
+                {
+                    id: 1,
+                    title: "รองประธานกลุ่มบริหารทั่วไป สภานักเรียน",
+                    period: "ปีการศึกษา ๒๕๖๘",
+                    category: "leadership",
+                    icon: "fa-users-gear",
+                    badge: "ผู้นำนักเรียน",
+                    description: "ทำหน้าที่บริหารจัดการ กำกับดูแล และประสานงานกิจกรรมทั่วไปภายในสภานักเรียน โรงเรียนห้วยผึ้งพิทยา พร้อมเป็นตัวแทนฝึกซ้อมนักเรียนเข้าร่วมกิจกรรมต่าง ๆ"
+                },
+                {
+                    id: 2,
+                    title: "คณะบริหารสภาเด็กและเยาวชน",
+                    period: "เทศบาลตำบลห้วยผึ้ง",
+                    category: "community",
+                    icon: "fa-hands-holding-child",
+                    badge: "เยาวชนชุมชน",
+                    description: "ร่วมทีมบริหารสภาเด็กและเยาวชนระดับท้องถิ่น ขับเคลื่อนกิจกรรมส่งเสริมศักยภาพ คุณธรรม และสุขภาวะของเด็กและเยาวชนในพื้นที่"
+                },
+                {
+                    id: 3,
+                    title: "แกนนำค่ายเยาวชนเจนใหม่หัวใจสุจริต ปี ๑ & ปี ๒",
+                    period: "กิจกรรมต่อเนื่อง 2 ปี",
+                    category: "integrity",
+                    icon: "fa-shield-heart",
+                    badge: "แกนนำต้านทุจริต",
+                    description: "เป็นนักเรียนแกนนำพัฒนาและดำเนินกระบวนการสอนตามหลักสูตรต้านทุจริตศึกษา ผ่านกิจกรรม 'ค่ายเยาวชนเจนใหม่หัวใจสุจริต' ต่อเนื่อง 2 ปีซ้อน"
+                },
+                {
+                    id: 4,
+                    title: "วิทยากรตัวคูณ สร้างจิตสำนึกต้านทุจริต",
+                    period: "โรงเรียนเครือข่าย",
+                    category: "integrity",
+                    icon: "fa-chalkboard-user",
+                    badge: "วิทยากรเยาวชน",
+                    description: "อบรมถ่ายทอดความรู้และส่งต่อกระบวนการเรียนรู้เรื่องความสุจริตให้แก่นักเรียนในโรงเรียนเครือข่าย เพื่อสร้างสังคมสถานศึกษาสุจริต"
+                },
+                {
+                    id: 5,
+                    title: "พิธีกรดำเนินรายการ เปิดบ้านวิชาการ & TO BE NUMBER ONE",
+                    period: "กิจกรรมโรงเรียน",
+                    category: "academic",
+                    icon: "fa-microphone-lines",
+                    badge: "การสื่อสาร & พิธีกร",
+                    description: "ได้รับมอบหมายให้ปฏิบัติหน้าที่พิธีกรดำเนินรายการในงานเปิดบ้านวิชาการ และกิจกรรมรณรงค์ป้องกันและแก้ไขปัญหายาเสพติด TO BE NUMBER ONE"
+                },
+                {
+                    id: 6,
+                    title: "แกนนำจัดกิจกรรมสัปดาห์วิทยาศาสตร์ & เปิดบ้านวิชาการ",
+                    period: "กิจกรรมโรงเรียน",
+                    category: "academic",
+                    icon: "fa-atom",
+                    badge: "วิชาการ",
+                    description: "จัดเตรียมและดำเนินกิจกรรมส่งเสริมทักษะกระบวนการทางวิทยาศาสตร์ นวัตกรรม และนิทรรศการวิชาการในสถานศึกษา"
+                },
+                {
+                    id: 7,
+                    title: "ตัวแทนสภาเด็กฯ อบรมแก้ไขปัญหายาเสพติด",
+                    period: "ระดับอำเภอ",
+                    category: "community",
+                    icon: "fa-ribbon",
+                    badge: "ตัวแทนอำเภอ",
+                    description: "เป็นตัวแทนสภาเด็กและเยาวชนอำเภอห้วยผึ้ง เข้าร่วมการอบรมเชิงปฏิบัติการเพื่อการป้องกัน และแก้วิกฤตปัญหายาเสพติดในกลุ่มวัยรุ่น"
+                },
+                {
+                    id: 8,
+                    title: "โครงการต้านทุจริตภาคประชาชน 'การสร้างสังคมสุจริต'",
+                    period: "ระดับชุมชน",
+                    category: "integrity",
+                    icon: "fa-people-roof",
+                    badge: "สังคมสุจริต",
+                    description: "ร่วมกิจกรรมขับเคลื่อนความซื่อสัตย์สุจริต โดยความร่วมมือของเครือข่ายภาคประชาชน องค์กรชุมชน และเยาวชนในพื้นที่"
+                },
+                {
+                    id: 9,
+                    title: "โครงการอบรมการตระหนักรู้และป้องกันภัยการค้ามนุษย์",
+                    period: "ระดับเขตพื้นที่",
+                    category: "community",
+                    icon: "fa-scale-balanced",
+                    badge: "สิทธิเยาวชน",
+                    description: "เข้าร่วมการอบรมเสริมสร้างความตระหนักรู้และสร้างภูมิคุ้มกันแก่เด็กและเยาวชน ให้รู้เท่าทันภัยจากการค้ามนุษย์และการถูกล่อลวง"
+                }
+            ];
+
+            const skills = [
+                { name: "มนุษยสัมพันธ์และการสื่อสาร (Interpersonal Skills)", score: 95, desc: "ปรับตัวเข้ากับทุกคนได้ง่าย สร้างบรรยากาศเชิงบวกและความไว้วางใจ" },
+                { name: "การทำงานเป็นทีม (Teamwork & Collaboration)", score: 92, desc: "ร่วมมือกับผู้อื่นได้ดี รับฟังความคิดเห็น และพร้อมสนับสนุนงานส่วนรวม" },
+                { name: "ภาวะผู้นำและการบริหารกิจกรรม (Leadership)", score: 88, desc: "มีประสบการณ์รองประธานสภานักเรียนและกรรมการสภาเด็กและเยาวชน" },
+                { name: "การพูดในที่สาธารณะ & พิธีกร (Public Speaking)", score: 86, desc: "ดำเนินรายการกิจกรรมระดับโรงเรียน ชุมชน และงานวิชาการได้ราบรื่น" },
+                { name: "จิตอาสาและการพัฒนาชุมชน (Community Health & Service)", score: 90, desc: "มุ่งมั่นร่วมกิจกรรมต้านยาเสพติด ต้านทุจริต และส่งเสริมสุขภาพประชาชน" }
+            ];
+
+            const copyToClipboard = (text) => {
+                const el = document.createElement('textarea');
+                el.value = text;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            const filteredExperiences = useMemo(() => {
+                return experiences.filter(exp => {
+                    const matchesCategory = filterCategory === 'all' || exp.category === filterCategory;
+                    const matchesSearch = exp.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                          exp.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                          exp.badge.toLowerCase().includes(searchQuery.toLowerCase());
+                    return matchesCategory && matchesSearch;
+                });
+            }, [filterCategory, searchQuery]);
+
+            return (
+                <div class="min-h-screen flex flex-col justify-between bg-slate-50">
+                    
+                    {}
+                    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+                        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="flex justify-between items-center h-16">
+                                
+                                {/* Logo & Name */}
+                                <div class="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('overview')}>
+                                    <div class="w-10 h-10 rounded-xl gatsby-gradient text-white flex items-center justify-center font-bold text-lg shadow-md shadow-brand-500/20">
+                                        ก
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <h1 class="font-bold text-slate-900 text-base md:text-lg leading-tight">กัลย์สุดา กรกัน</h1>
+                                            <span class="bg-brand-100 text-brand-800 text-[11px] font-semibold px-2 py-0.5 rounded-full">น้ำขิง</span>
+                                        </div>
+                                        <p class="text-xs text-brand-600 font-medium">สิรินธรขอนแก่น • Academic Portfolio</p>
+                                    </div>
+                                </div>
+
+                                {/* Desktop Navigation Tabs */}
+                                <nav class="hidden md:flex space-x-1">
+                                    {[
+                                        { id: 'overview', label: 'หน้าแรก', icon: 'fa-house' },
+                                        { id: 'education', label: 'ประวัติการศึกษา', icon: 'fa-user-graduate' },
+                                        { id: 'experience', label: 'ประสบการณ์ & ผลงาน', icon: 'fa-award' },
+                                        { id: 'skills', label: 'ทักษะความสามารถ', icon: 'fa-star' },
+                                        { id: 'contact', label: 'ติดต่อ', icon: 'fa-address-card' }
+                                    ].map(tab => (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => setActiveTab(tab.id)}
+                                            class={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex items-center space-x-2 ${
+                                                activeTab === tab.id
+                                                    ? 'bg-brand-50 text-brand-700 shadow-sm border border-brand-200/80'
+                                                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                                            }`}
+                                        >
+                                            <i class={`fa-solid ${tab.icon} text-xs`}></i>
+                                            <span>{tab.label}</span>
+                                        </button>
+                                    ))}
+                                </nav>
+
+                                {/* Deploy / GitHub Pages Button */}
+                                <button 
+                                    onClick={() => setShowDeployGuide(true)}
+                                    class="bg-slate-900 hover:bg-slate-800 text-white text-xs px-3.5 py-2 rounded-xl font-medium transition flex items-center space-x-2 shadow-sm"
+                                >
+                                    <i class="fa-brands fa-github text-sm"></i>
+                                    <span class="hidden sm:inline">วิธีอัปขึ้น GitHub Pages</span>
+                                    <span class="sm:hidden">Deploy</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Mobile Navigation Bar */}
+                        <div class="md:hidden flex overflow-x-auto border-t border-slate-200/80 px-2 py-2 space-x-1.5 bg-white custom-scrollbar">
+                            {[
+                                { id: 'overview', label: 'หน้าแรก', icon: 'fa-house' },
+                                { id: 'education', label: 'การศึกษา', icon: 'fa-user-graduate' },
+                                { id: 'experience', label: 'ผลงาน', icon: 'fa-award' },
+                                { id: 'skills', label: 'ทักษะ', icon: 'fa-star' },
+                                { id: 'contact', label: 'ติดต่อ', icon: 'fa-address-card' }
+                            ].map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    class={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap flex items-center space-x-1.5 transition ${
+                                        activeTab === tab.id
+                                            ? 'bg-brand-600 text-white shadow-sm'
+                                            : 'text-slate-600 hover:bg-slate-100'
+                                    }`}
+                                >
+                                    <i class={`fa-solid ${tab.icon}`}></i>
+                                    <span>{tab.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </header>
+
+                    {}
+                    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
+
+                        {/* TAB 1: OVERVIEW */}
+                        {activeTab === 'overview' && (
+                            <div class="space-y-8 animate-fade-in">
+                                
+                                {/* Hero Card */}
+                                <div class="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm">
+                                    <div class="gatsby-gradient h-36 md:h-48 relative p-6 flex justify-between items-start">
+                                        <div class="inline-flex items-center bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs px-3.5 py-1.5 rounded-full font-normal">
+                                            <i class="fa-solid fa-sparkles text-amber-300 mr-1.5"></i>
+                                            แฟ้มสะสมผลงานวิชาการ & กิจกรรม
+                                        </div>
+                                        <div class="hidden md:block text-right text-white/80 text-xs">
+                                            <span class="block font-medium">จังหวัดขอนแก่น / กาฬสินธุ์</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="px-6 md:px-8 pb-8 pt-0 relative">
+                                        <div class="flex flex-col md:flex-row items-center md:items-end -mt-20 md:-mt-16 mb-6 space-y-4 md:space-y-0 md:space-x-6 text-center md:text-left">
+                                            
+                                            {/* Profile Avatar / Box */}
+                                            <div class="relative shrink-0">
+                                                <div class="w-32 h-32 md:w-36 md:h-36 rounded-2xl p-1 bg-white shadow-xl overflow-hidden border-2 border-brand-100">
+                                                    <div class="w-full h-full rounded-xl bg-slate-100 flex flex-col items-center justify-center text-brand-700 relative overflow-hidden group">
+                                                        <div class="w-16 h-16 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 text-3xl mb-1">
+                                                            <i class="fa-solid fa-user-nurse"></i>
+                                                        </div>
+                                                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Kansuda</span>
+                                                    </div>
+                                                </div>
+                                                <span class="absolute bottom-1 right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full" title="กำลังศึกษาอยู่"></span>
+                                            </div>
+
+                                            <div class="flex-1">
+                                                <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
+                                                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">{personalInfo.fullName}</h2>
+                                                    <span class="bg-brand-100 text-brand-800 text-xs px-3 py-0.5 rounded-full font-bold">
+                                                        ({personalInfo.nickname})
+                                                    </span>
+                                                </div>
+                                                <p class="text-slate-700 text-sm md:text-base font-medium flex items-center justify-center md:justify-start gap-1.5">
+                                                    <i class="fa-solid fa-building-columns text-brand-600"></i>
+                                                    <span>กำลังศึกษาอยู่: <strong>{personalInfo.currentInstitute}</strong></span>
+                                                </p>
+                                                <p class="text-xs text-slate-500 mt-1 flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1">
+                                                    <span><i class="fa-solid fa-school text-brand-500 mr-1"></i> จบ ม.6 จาก{personalInfo.highSchool}</span>
+                                                    <span><i class="fa-solid fa-cake-candles text-brand-500 mr-1"></i> อายุ {personalInfo.age} ปี</span>
+                                                    <span><i class="fa-solid fa-flag text-brand-500 mr-1"></i> สัญชาติ{personalInfo.nationality}</span>
+                                                </p>
+                                            </div>
+
+                                            <div class="flex gap-2">
+                                                <button 
+                                                    onClick={() => setActiveTab('contact')}
+                                                    class="bg-brand-600 hover:bg-brand-700 text-white text-xs md:text-sm font-semibold px-4 py-2.5 rounded-xl shadow-md transition flex items-center space-x-2"
+                                                >
+                                                    <i class="fa-solid fa-paper-plane"></i>
+                                                    <span>ช่องทางติดต่อ</span>
+                                                </button>
+                                                <button 
+                                                    onClick={() => setActiveTab('experience')}
+                                                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs md:text-sm font-semibold px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5"
+                                                >
+                                                    <span>ดูผลงานทั้งหมด</span>
+                                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="border-t border-slate-100 pt-6">
+                                            <h3 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-2">บทสรุปประวัติส่วนตัว</h3>
+                                            <p class="text-slate-700 text-sm md:text-base leading-relaxed bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                                                "{personalInfo.bio}"
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Highlights Section */}
+                                {}
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+                                        <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl mb-4">
+                                            <i class="fa-solid fa-building-columns"></i>
+                                        </div>
+                                        <h3 class="font-bold text-slate-900 text-base mb-1">การศึกษานักศึกษาสาธารณสุข</h3>
+                                        <p class="text-xs text-brand-600 font-medium mb-3">วิทยาลัยการสาธารณสุขสิรินธร ขอนแก่น</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">
+                                            มุ่งมั่นศึกษาเรียนรู้ในสาขาสาธารณสุข เตรียมพร้อมสู่การเป็นบุคลากรสาธารณสุขที่มีคุณภาพและเข้าใจชุมชน
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+                                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4">
+                                            <i class="fa-solid fa-users-gear"></i>
+                                        </div>
+                                        <h3 class="font-bold text-slate-900 text-base mb-1">รองประธานสภานักเรียน</h3>
+                                        <p class="text-xs text-indigo-600 font-medium mb-3">ปีการศึกษา ๒๕๖๘</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">
+                                            บริหารกลุ่มงานทั่วไป ประสานงานสภานักเรียน ร่วมจัดกิจกรรมพัฒนาผู้เรียนและฝึกซ้อมนักเรียน
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+                                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4">
+                                            <i class="fa-solid fa-shield-heart"></i>
+                                        </div>
+                                        <h3 class="font-bold text-slate-900 text-base mb-1">แกนนำค่ายต้านทุจริต</h3>
+                                        <p class="text-xs text-emerald-600 font-medium mb-3">ต่อเนื่อง 2 ปีซ้อน & วิทยากรเครือข่าย</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">
+                                            จัดกระบวนการเรียนรู้ 'ค่ายเยาวชนเจนใหม่หัวใจสุจริต' และเป็นวิทยากรตัวคูณขยายผลในโรงเรียนเครือข่าย
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Key Metrics Bar */}
+                                <div class="bg-slate-900 text-white rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-lg">
+                                    <div class="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                                        <div class="p-2">
+                                            <div class="text-3xl md:text-4xl font-extrabold text-brand-400">สิรินธร</div>
+                                            <div class="text-xs text-slate-300 mt-1">วสส. ขอนแก่น</div>
+                                        </div>
+                                        <div class="p-2">
+                                            <div class="text-3xl md:text-4xl font-extrabold text-emerald-400">9+</div>
+                                            <div class="text-xs text-slate-300 mt-1">โครงการ & กิจกรรมหลัก</div>
+                                        </div>
+                                        <div class="p-2">
+                                            <div class="text-3xl md:text-4xl font-extrabold text-amber-400">2 ปี</div>
+                                            <div class="text-xs text-slate-300 mt-1">แกนนำต้านทุจริต</div>
+                                        </div>
+                                        <div class="p-2">
+                                            <div class="text-3xl md:text-4xl font-extrabold text-purple-400">100%</div>
+                                            <div class="text-xs text-slate-300 mt-1">มนุษยสัมพันธ์ & ทีมเวิร์ก</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* TAB 2: EDUCATION */}
+                        {}
+                        {activeTab === 'education' && (
+                            <div class="space-y-6 animate-fade-in">
+                                <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200/80 shadow-sm">
+                                    <div class="flex items-center space-x-3 mb-6 border-b border-slate-100 pb-4">
+                                        <div class="w-10 h-10 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center text-lg font-bold">
+                                            <i class="fa-solid fa-graduation-cap"></i>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-xl font-bold text-slate-900">ประวัติการศึกษา (Education History)</h2>
+                                            <p class="text-xs text-slate-500">เส้นทางการศึกษาจากระดับมัธยมศึกษาถึงสถาบันการศึกษาสาธารณสุข</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Timeline Cards */}
+                                    <div class="space-y-6">
+                                        {educationHistory.map((item, idx) => (
+                                            <div key={idx} class={`p-6 rounded-2xl border-2 ${item.color} transition hover:shadow-md`}>
+                                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-10 h-10 rounded-xl bg-white text-brand-700 flex items-center justify-center text-lg shadow-sm border border-slate-200">
+                                                            <i class={`fa-solid ${item.icon}`}></i>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-xs font-bold text-slate-500 uppercase">{item.level}</span>
+                                                            <h3 class="text-lg font-bold text-slate-900">{item.institute}</h3>
+                                                        </div>
+                                                    </div>
+                                                    <span class="self-start md:self-auto text-xs font-bold px-3 py-1 rounded-full bg-brand-600 text-white shadow-sm">
+                                                        {item.badge}
+                                                    </span>
+                                                </div>
+
+                                                <p class="text-xs text-slate-600 mb-4 flex items-center space-x-1">
+                                                    <i class="fa-solid fa-location-dot text-brand-500 mr-1"></i>
+                                                    <span>{item.location}</span>
+                                                </p>
+
+                                                <div class="bg-white/80 p-4 rounded-xl border border-slate-200/60">
+                                                    <h4 class="text-xs font-bold text-slate-700 mb-2">รายละเอียดและบทบาทสำคัญ:</h4>
+                                                    <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+                                                        {item.details.map((d, dIdx) => (
+                                                            <li key={dIdx}>{d}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* TAB 3: EXPERIENCE */}
+                        {}
+                        {activeTab === 'experience' && (
+                            <div class="space-y-6 animate-fade-in">
+                                <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200/80 shadow-sm">
+                                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+                                        <div>
+                                            <h2 class="text-xl font-bold text-slate-900">ประสบการณ์และผลงานกิจกรรม</h2>
+                                            <p class="text-xs text-slate-500">รวมผลงานการทำงานสภานักเรียน ต้านทุจริต สื่อสาร และจิตอาสาพัฒนาสังคม</p>
+                                        </div>
+
+                                        {/* Search & Filter Controls */}
+                                        <div class="flex flex-col sm:flex-row gap-2">
+                                            {/* Search Input */}
+                                            <div class="relative">
+                                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-400"></i>
+                                                <input 
+                                                    type="text"
+                                                    placeholder="ค้นหากิจกรรม..."
+                                                    value={searchQuery}
+                                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                                    class="pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 w-full sm:w-48"
+                                                />
+                                            </div>
+
+                                            {/* Filter Category Chips */}
+                                            <div class="flex flex-wrap gap-1 bg-slate-100 p-1 rounded-xl">
+                                                {[
+                                                    { id: 'all', label: 'ทั้งหมด' },
+                                                    { id: 'leadership', label: 'สภานักเรียน' },
+                                                    { id: 'integrity', label: 'ต้านทุจริต' },
+                                                    { id: 'academic', label: 'วิชาการ/พิธีกร' },
+                                                    { id: 'community', label: 'ชุมชน/อบรม' }
+                                                ].map(btn => (
+                                                    <button
+                                                        key={btn.id}
+                                                        onClick={() => setFilterCategory(btn.id)}
+                                                        class={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
+                                                            filterCategory === btn.id
+                                                                ? 'bg-white text-brand-700 shadow-sm'
+                                                                : 'text-slate-600 hover:text-slate-900'
+                                                        }`}
+                                                    >
+                                                        {btn.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Experiences Cards Grid */}
+                                    {filteredExperiences.length > 0 ? (
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {filteredExperiences.map(item => (
+                                                <div key={item.id} class="p-5 rounded-2xl border border-slate-200/80 bg-white hover:border-brand-300 hover:shadow-md transition flex flex-col justify-between">
+                                                    <div>
+                                                        <div class="flex items-center justify-between mb-3">
+                                                            <span class="w-9 h-9 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center text-sm font-bold">
+                                                                <i class={`fa-solid ${item.icon}`}></i>
+                                                            </span>
+                                                            <span class="text-[11px] font-bold text-brand-700 bg-brand-50 px-2.5 py-1 rounded-lg border border-brand-100">
+                                                                {item.badge}
+                                                            </span>
+                                                        </div>
+                                                        <h3 class="font-bold text-slate-900 text-sm md:text-base mb-1">{item.title}</h3>
+                                                        <p class="text-xs text-slate-500 mb-2 flex items-center">
+                                                            <i class="fa-regular fa-calendar-check mr-1.5 text-brand-500"></i>
+                                                            <span>{item.period}</span>
+                                                        </p>
+                                                        <p class="text-xs text-slate-600 leading-relaxed">{item.description}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div class="text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                                            <i class="fa-solid fa-folder-open text-3xl text-slate-300 mb-2"></i>
+                                            <p class="text-xs text-slate-500">ไม่พบรายการกิจกรรมที่คุณค้นหา</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* TAB 4: SKILLS */}
+                        {}
+                        {activeTab === 'skills' && (
+                            <div class="space-y-6 animate-fade-in">
+                                <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200/80 shadow-sm">
+                                    <div class="mb-6 pb-4 border-b border-slate-100">
+                                        <h2 class="text-xl font-bold text-slate-900">ทักษะและความสามารถพิเศษ</h2>
+                                        <p class="text-xs text-slate-500">ศักยภาพด้านทักษะสังคม การสื่อสาร งานพิธีกร และการทำงานกลุ่ม</p>
+                                    </div>
+
+                                    {/* Highlight Special Skill Card */}
+                                    <div class="p-5 rounded-2xl bg-gradient-to-r from-brand-500 to-blue-600 text-white shadow-md mb-8 flex items-start space-x-4">
+                                        <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-2xl shrink-0">
+                                            <i class="fa-solid fa-heart-circle-check"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-base">จุดเด่นสำคัญ: ความสามารถด้านทักษะสังคม (Social Skills)</h3>
+                                            <p class="text-xs md:text-sm text-brand-50 mt-1 leading-relaxed">
+                                                "มีมนุษยสัมพันธ์ที่ดีเยี่ยม เข้ากับทุกคนได้ง่าย รับฟังความคิดเห็น มีความยืดหยุ่นในการปรับตัวให้เข้ากับสภาพแวดล้อมใหม่ๆ และร่วมมือทำงานเป็นทีมได้อย่างราบรื่น"
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Skill Rating Progress Bars */}
+                                    <div class="space-y-6">
+                                        {skills.map((skill, idx) => (
+                                            <div key={idx} class="space-y-2">
+                                                <div class="flex justify-between items-center text-xs md:text-sm">
+                                                    <span class="font-bold text-slate-800">{skill.name}</span>
+                                                    <span class="font-extrabold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md">{skill.score}%</span>
+                                                </div>
+                                                <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/60">
+                                                    <div 
+                                                        class="h-full gatsby-gradient rounded-full transition-all duration-700 ease-out"
+                                                        style={{ width: `${skill.score}%` }}
+                                                    ></div>
+                                                </div>
+                                                <p class="text-xs text-slate-500">{skill.desc}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Additional Competency Badges */}
+                                    <div class="mt-8 pt-6 border-t border-slate-100">
+                                        <h3 class="text-xs uppercase font-bold text-slate-400 mb-3 tracking-wider">ทักษะความเชี่ยวชาญเพิ่มเติม</h3>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="px-3.5 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold flex items-center">
+                                                <i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>การจัดค่ายกิจกรรมเยาวชน
+                                            </span>
+                                            <span class="px-3.5 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold flex items-center">
+                                                <i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>งานดำเนินรายการ & พิธีกร
+                                            </span>
+                                            <span class="px-3.5 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold flex items-center">
+                                                <i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>การทำงานสภานักเรียน & สภาเด็กฯ
+                                            </span>
+                                            <span class="px-3.5 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold flex items-center">
+                                                <i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>วิทยากรตัวคูณต้านทุจริตศึกษา
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* TAB 5: CONTACT */}
+                        {}
+                        {activeTab === 'contact' && (
+                            <div class="space-y-6 animate-fade-in">
+                                <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200/80 shadow-sm">
+                                    <div class="mb-6 pb-4 border-b border-slate-100">
+                                        <h2 class="text-xl font-bold text-slate-900">ช่องทางการติดต่อ</h2>
+                                        <p class="text-xs text-slate-500">ข้อมูลการติดต่อโดยตรง สถานศึกษา และที่อยู่ตามภูมิภาค</p>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        
+                                        {/* Phone Number */}
+                                        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-start space-x-4">
+                                            <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl shrink-0">
+                                                <i class="fa-solid fa-phone"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">เบอร์โทรศัพท์</h3>
+                                                <p class="text-lg font-bold text-slate-900 mt-1">{personalInfo.phone}</p>
+                                                <a 
+                                                    href={`tel:${personalInfo.phone}`} 
+                                                    class="inline-flex items-center text-xs text-brand-600 hover:text-brand-800 font-bold mt-2"
+                                                >
+                                                    <i class="fa-solid fa-headset mr-1.5"></i> โทรติดต่อทันที
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        {/* Email Address */}
+                                        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-start space-x-4">
+                                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl shrink-0">
+                                                <i class="fa-solid fa-envelope"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">อีเมล (Email)</h3>
+                                                <p class="text-base font-bold text-slate-900 mt-1 break-all">{personalInfo.email}</p>
+                                                <button 
+                                                    onClick={() => copyToClipboard(personalInfo.email)}
+                                                    class="inline-flex items-center text-xs text-brand-600 hover:text-brand-800 font-bold mt-2 space-x-1"
+                                                >
+                                                    <i class="fa-solid fa-copy"></i>
+                                                    <span>{copied ? 'คัดลอกอีเมลแล้ว!' : 'คัดลอกที่อยู่อีเมล'}</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Current Education Place */}
+                                        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-start space-x-4">
+                                            <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl shrink-0">
+                                                <i class="fa-solid fa-building-columns"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">สถาบันการศึกษาปัจจุบัน</h3>
+                                                <p class="text-sm font-bold text-slate-900 mt-1">{personalInfo.currentInstitute}</p>
+                                                <p class="text-xs text-slate-500 mt-0.5">จังหวัดขอนแก่น</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Registered Address */}
+                                        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-start space-x-4">
+                                            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
+                                                <i class="fa-solid fa-house-chimney"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">ที่อยู่ตามภูมิลำเนา</h3>
+                                                <p class="text-sm font-bold text-slate-900 mt-1">{personalInfo.address}</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                    </main>
+
+                    {}
+                    {showDeployGuide && (
+                        <div class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                            <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl space-y-5 animate-fade-in">
+                                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center text-xl">
+                                            <i class="fa-brands fa-github"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-slate-900">วิธีลงเว็บไซต์บน GitHub Pages</h3>
+                                            <p class="text-xs text-slate-500">เผยแพร่ Portfolio ออนไลน์ได้ฟรีตลอดชีพใน 3 ขั้นตอนง่ายๆ</p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={() => setShowDeployGuide(false)}
+                                        class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition"
+                                    >
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+
+                                <div class="space-y-4 text-xs md:text-sm text-slate-700">
+                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80">
+                                        <h4 class="font-bold text-slate-900 flex items-center text-sm">
+                                            <span class="w-6 h-6 rounded-full bg-brand-600 text-white text-xs flex items-center justify-center mr-2 shrink-0">1</span>
+                                            บันทึกไฟล์โค้ดนี้เป็น index.html
+                                        </h4>
+                                        <p class="text-xs text-slate-600 mt-1.5 pl-8">
+                                            คัดลอกโค้ดทั้งหมดในไฟล์นี้ แล้วเซฟไว้ในเครื่องคอมพิวเตอร์ของคุณ โดยตั้งชื่อไฟล์ว่า <code class="bg-slate-200 px-1.5 py-0.5 rounded text-brand-700 font-mono">index.html</code>
+                                        </p>
+                                    </div>
+
+                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80">
+                                        <h4 class="font-bold text-slate-900 flex items-center text-sm">
+                                            <span class="w-6 h-6 rounded-full bg-brand-600 text-white text-xs flex items-center justify-center mr-2 shrink-0">2</span>
+                                            สร้าง Repository บน GitHub
+                                        </h4>
+                                        <p class="text-xs text-slate-600 mt-1.5 pl-8">
+                                            สมัคร/เข้าสู่ระบบ <a href="https://github.com" target="_blank" rel="noreferrer" class="text-brand-600 font-bold underline">GitHub.com</a> &rarr; กดปุ่ม <strong>New Repository</strong> &rarr; ตั้งชื่อ เช่น <code class="bg-slate-200 px-1 py-0.5 rounded font-mono">portfolio</code> &rarr; เลือก Public &rarr; กดสร้าง แล้วอัปโหลดไฟล์ <code class="bg-slate-200 px-1 py-0.5 rounded font-mono">index.html</code> ขึ้นไป
+                                        </p>
+                                    </div>
+
+                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80">
+                                        <h4 class="font-bold text-slate-900 flex items-center text-sm">
+                                            <span class="w-6 h-6 rounded-full bg-brand-600 text-white text-xs flex items-center justify-center mr-2 shrink-0">3</span>
+                                            เปิดใช้งาน GitHub Pages
+                                        </h4>
+                                        <p class="text-xs text-slate-600 mt-1.5 pl-8">
+                                            ไปที่เมนู <strong>Settings</strong> ใน Repository &rarr; เลือกเมนู <strong>Pages</strong> ด้านซ้าย &rarr; ตรง <strong>Branch</strong> เลือกเป็น <code class="bg-slate-200 px-1 py-0.5 rounded font-mono">main</code> แล้วกด <strong>Save</strong>
+                                        </p>
+                                    </div>
+
+                                    <div class="p-4 bg-emerald-50 text-emerald-800 rounded-2xl text-xs border border-emerald-200 flex items-center space-x-2">
+                                        <i class="fa-solid fa-circle-check text-lg text-emerald-600 shrink-0"></i>
+                                        <span>
+                                            เมื่อตั้งค่าเสร็จ รอประมาณ 1-2 นาที คุณจะได้ลิงก์เว็บไซต์ เช่น <code class="font-mono font-bold">https://username.github.io/portfolio/</code> นำไปใช้ยื่นสมัครเรียนหรือยื่นพอร์ตได้ทันที!
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="pt-2 text-right">
+                                    <button 
+                                        onClick={() => setShowDeployGuide(false)}
+                                        class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-800 transition"
+                                    >
+                                        เข้าใจแล้ว / ปิดหน้าต่าง
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {}
+                    <footer class="bg-white border-t border-slate-200 py-6 mt-8">
+                        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1.5">
+                            <p>© {new Date().getFullYear()} กัลย์สุดา กรกัน (น้ำขิง) — Academic Portfolio</p>
+                            <p class="text-[11px] text-slate-400">วิทยาลัยการสาธารณสุขสิรินธร จังหวัดขอนแก่น • Gatsby Minimal UI with Tailwind CSS</p>
+                        </div>
+                    </footer>
+
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
